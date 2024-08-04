@@ -56,7 +56,7 @@ public abstract class EntityController<T> {
 
         try {
             List<Object[]> buffer = selectItems(condition, null);
-            if (buffer.size() == 0)
+            if (buffer.isEmpty())
                 return null;
             item = bufferToItem(buffer.get(0));
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public abstract class EntityController<T> {
             throw new Exception("Can't check an item (" + condition + ")\n" + e.getMessage());
         }
 
-        return buffer.size() > 0;
+        return !buffer.isEmpty();
     }
 
     protected List<Object[]> selectItems(String condition, String orderBy, String[] columns) throws Exception {
@@ -129,8 +129,8 @@ public abstract class EntityController<T> {
             sqlColumns.append(sqlColumns.length() > 0 ? ", " : "").append(column);
         var sql = "SELECT " + sqlColumns
                 + " FROM " + tableName
-                + (condition != null && condition.length() > 0 ? " WHERE " + condition : "")
-                + (orderBy != null && orderBy.length() > 0 ? " ORDER BY " + orderBy : "");
+                + (condition != null && !condition.isEmpty() ? " WHERE " + condition : "")
+                + (orderBy != null && !orderBy.isEmpty() ? " ORDER BY " + orderBy : "");
         buffer = dbController.execQuery(sql);
 
         return buffer;
@@ -141,7 +141,7 @@ public abstract class EntityController<T> {
     protected abstract List<Object[]> selectItems(String condition, String orderBy) throws Exception;
 
     private static void checkCondition(String condition) throws Exception {
-        if (condition == null || condition.length() == 0)
+        if (condition == null || condition.isEmpty())
             throw new Exception("The condition shouldn't be empty!");
     }
 }

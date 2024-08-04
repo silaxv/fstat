@@ -5,30 +5,14 @@ import data.entities.*;
 import utils.DateUtils;
 import utils.NumericUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static data.entities.Document.*;
+import static data.entities.DocumentDetail.*;
+
 public class DocumentController extends EntityController<Document> {
-
-    private static final String TABLE_NAME = "documents";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_DATE = "doc_date";
-    private static final String COLUMN_TRANS_GROUP = "trans_group";
-    private static final String COLUMN_ACT = "act";
-    private static final String COLUMN_ACCOUNT = "f_accounts";
-    private static final String COLUMN_NOTES = "notes";
-
-    private static final String TABLE_DT_NAME = "documents_details";
-    private static final String COLUMN_DT_ID = "id";
-    private static final String COLUMN_DT_DOCUMENT = "f_documents";
-    private static final String COLUMN_DT_PRODUCT = "f_products";
-    private static final String COLUMN_DT_USER = "f_users";
-    private static final String COLUMN_DT_QUANTITY = "quantity";
-    private static final String COLUMN_DT_PRICE = "price";
-    private static final String COLUMN_DT_SUBTOTAL = "subtotal";
-    private static final String COLUMN_DT_NOTES = "notes";
 
     private CategoryController categories;
     private AccountController accounts;
@@ -54,6 +38,7 @@ public class DocumentController extends EntityController<Document> {
         dbController.createTable(TABLE_DT_NAME, new String[] {
                 COLUMN_DT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
                 COLUMN_DT_DOCUMENT + " INTEGER NOT NULL",
+                COLUMN_DT_MAIN + " BOOLEAN NOT NULL",
                 COLUMN_DT_PRODUCT + " INTEGER NOT NULL",
                 COLUMN_DT_USER + " INTEGER",
                 COLUMN_DT_QUANTITY + " DECIMAL(15,3) NOT NULL",
@@ -63,8 +48,6 @@ public class DocumentController extends EntityController<Document> {
         });
 
         dbController.createIndex(TABLE_DT_NAME, 1, new String[] { COLUMN_DT_DOCUMENT });
-
-        //todo: create indexes
     }
 
     @Override
@@ -105,6 +88,7 @@ public class DocumentController extends EntityController<Document> {
         try {
             var sql = "SELECT " + COLUMN_DT_ID + ", "
                     + COLUMN_DT_DOCUMENT + ", "
+                    + COLUMN_DT_MAIN + ", "
                     + COLUMN_DT_PRODUCT + ", "
                     + COLUMN_DT_USER + ", "
                     + COLUMN_DT_QUANTITY + ", "
@@ -119,12 +103,13 @@ public class DocumentController extends EntityController<Document> {
                 DocumentDetail documentDetail = new DocumentDetail(
                         (int) item[0],
                         document,
-                        products.getProductById((int) item[2]),
-                        item[3] != null ? users.getUserById((int) item[3]) : null,
-                        NumericUtils.objectToBigDecimal(item[4]),
+                        (Integer) item[2] == 1,
+                        products.getProductById((int) item[3]),
+                        item[4] != null ? users.getUserById((int) item[4]) : null,
                         NumericUtils.objectToBigDecimal(item[5]),
                         NumericUtils.objectToBigDecimal(item[6]),
-                        (String) item[7]
+                        NumericUtils.objectToBigDecimal(item[7]),
+                        (String) item[8]
                 );
                 documentDetails.add(documentDetail);
             }
@@ -242,6 +227,7 @@ public class DocumentController extends EntityController<Document> {
         //Update existing records
         try {
             var columnsNames = new String[] {
+                    COLUMN_DT_MAIN,
                     COLUMN_DT_PRODUCT,
                     COLUMN_DT_USER,
                     COLUMN_DT_QUANTITY,
@@ -255,6 +241,7 @@ public class DocumentController extends EntityController<Document> {
                 if (detail.getProduct() == null)
                     throw new Exception("Product can't be null (detail id = " + detail.getId() + ")");
                 var values = new Object[] {
+                        detail.isMain(),
                         detail.getProduct().getId(),
                         detail.getUser() != null ? detail.getUser().getId() : null,
                         detail.getQuantity(),
@@ -280,6 +267,7 @@ public class DocumentController extends EntityController<Document> {
         try {
             var columnsNames = new String[] {
                     COLUMN_DT_DOCUMENT,
+                    COLUMN_DT_MAIN,
                     COLUMN_DT_PRODUCT,
                     COLUMN_DT_USER,
                     COLUMN_DT_QUANTITY,
@@ -295,6 +283,7 @@ public class DocumentController extends EntityController<Document> {
                     throw new Exception("Product can't be null!");
                 var row = new Object[] {
                         documentId,
+                        detail.isMain(),
                         detail.getProduct().getId(),
                         detail.getUser() != null ? detail.getUser().getId() : null,
                         detail.getQuantity(),
@@ -304,7 +293,7 @@ public class DocumentController extends EntityController<Document> {
                 };
                 columnsValues.add(row);
             }
-            if (columnsValues.size() > 0)
+            if (!columnsValues.isEmpty())
                 dbController.insertDataBatch(TABLE_DT_NAME, columnsNames, columnsValues);
         } catch (Exception e) {
             throw new Exception("Can't create a new detail record\n" + details.toString() + "\n" + e.getMessage());
@@ -325,9 +314,9 @@ public class DocumentController extends EntityController<Document> {
                 + " FROM " + TABLE_NAME + " AS d"
                 + " LEFT JOIN " + TABLE_DT_NAME + " AS dd"
                 + " ON d." + COLUMN_ID + " = dd." + COLUMN_DT_DOCUMENT
-                + (condition != null && condition.length() > 0 ? " WHERE " + condition : "")
+                + (condition != null && !condition.isEmpty() ? " WHERE " + condition : "")
                 + " GROUP BY d." + COLUMN_ID
-                + (orderBy != null && orderBy.length() > 0 ? " ORDER BY " + orderBy : "");
+                + (orderBy != null && !orderBy.isEmpty() ? " ORDER BY " + orderBy : "");
         buffer = dbController.execQuery(sql);
 
         return buffer;

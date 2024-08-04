@@ -7,13 +7,9 @@ import data.entities.TransGroup;
 
 import java.util.List;
 
-public class ProductController extends EntityController<Product> {
+import static data.entities.Product.*;
 
-    private static final String TABLE_NAME = "products";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_CATEGORY = "f_categories";
-    private static final String COLUMN_TRANS_GROUP = "trans_group";
-    private static final String COLUMN_NAME = "name";
+public class ProductController extends EntityController<Product> {
 
     private CategoryController categories;
 

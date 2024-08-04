@@ -3,12 +3,18 @@ package data.entities;
 /*
     TABLE products --By the definition used in economics, products include services
         id INT
-        f_categories INT
+        category_id INT
         trans_group TINYINT
         name VARCHAR(128)
 */
 
 public class Product {
+
+    public static final String TABLE_NAME = "products";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_CATEGORY = "category_id";
+    public static final String COLUMN_TRANS_GROUP = "trans_group";
+    public static final String COLUMN_NAME = "name";
 
     private int id;
     private Category category;

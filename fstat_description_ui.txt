@@ -1,0 +1,21 @@
+==Transactions
+>Account  >Period
++ *Date / *Deposit / *Withdrawal
++ *Transfer / *Category / *Product / *Deposit / *Withdrawal / *User / *Tags
+
+==Add expense dialog
+
+*Account  >Date  >Active
+>Category  >Product
+>Price  >Quantity  >Subtotal
+[Add position] [Exclude position]
++ >Category  >Product  >Price  >Quantity  >Subtotal
+*Total
+>User  >Tags
+>Notes
+
+==Add income dialog
+*Account  >Date  >Active
+>Category  >Total
+>User
+>Notes

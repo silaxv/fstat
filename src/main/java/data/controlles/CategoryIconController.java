@@ -5,11 +5,9 @@ import data.entities.CategoryIcon;
 
 import java.util.List;
 
-public class CategoryIconController extends EntityController<CategoryIcon> {
+import static data.entities.CategoryIcon.*;
 
-    private static final String TABLE_NAME = "categories_icons";
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_DATA = "data_array";
+public class CategoryIconController extends EntityController<CategoryIcon> {
 
     public CategoryIconController(DataManager dataManager) {
         super(dataManager, TABLE_NAME);
@@ -73,8 +71,8 @@ public class CategoryIconController extends EntityController<CategoryIcon> {
                 + COLUMN_NAME + ","
                 + COLUMN_DATA
                 + " FROM " + TABLE_NAME
-                + (condition != null && condition.length() > 0 ? " WHERE " + condition : "")
-                + (orderBy != null && orderBy.length() > 0 ? " ORDER BY " + orderBy : "");
+                + (condition != null && !condition.isEmpty() ? " WHERE " + condition : "")
+                + (orderBy != null && !orderBy.isEmpty() ? " ORDER BY " + orderBy : "");
         buffer = dbController.execQuery(sql);
 
         return buffer;

@@ -5,8 +5,8 @@ package data.entities;
         id INT
         doc_date DATE
         trans_group TINYINT
-        act BIT
-        f_accounts INT
+        act BOOLEAN
+        account_id INT
         notes VARCHAR(1024)
 */
 
@@ -15,6 +15,14 @@ import java.util.Date;
 import java.util.List;
 
 public class Document {
+
+    public static final String TABLE_NAME = "documents";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_DATE = "doc_date";
+    public static final String COLUMN_TRANS_GROUP = "trans_group";
+    public static final String COLUMN_ACT = "act";
+    public static final String COLUMN_ACCOUNT = "account_id";
+    public static final String COLUMN_NOTES = "notes";
 
     private int id;
     private Date docDate;

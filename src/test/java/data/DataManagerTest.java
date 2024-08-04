@@ -13,6 +13,8 @@ import java.util.List;
 
 class DataManagerTest {
 
+    private static final String TEST_RESOURCES_FOLDER = "src/test/resources/";
+
     DataManager dataManager = DataManager.getInstance();
     AccountController accounts = dataManager.getAccounts();
     CategoryController categories  = dataManager.getCategories();
@@ -110,9 +112,9 @@ class DataManagerTest {
             dataArray[2] = 3;
             dataArray[3] = 6;
             dataArray[9] = 111;
-            File fileArk = new File("ark2.png");
+            File fileArk = new File(TEST_RESOURCES_FOLDER + "ark2.png");
             byte[] fileArkContent = Files.readAllBytes(fileArk.toPath());
-            File fileAlert = new File("alert.png");
+            File fileAlert = new File(TEST_RESOURCES_FOLDER + "alert.png");
             byte[] fileAlertContent = Files.readAllBytes(fileAlert.toPath());
             if (!categoriesIcons.iconExists("test1")) {
                 categoriesIcons.addIcon("test1", dataArray);
@@ -306,15 +308,15 @@ class DataManagerTest {
             DateUtils.numbersToDate(2024, 5, 1);
             documents.addDocument(DateUtils.numbersToDate(2024, 5, 1), transGroup, true, account, "1", null);
             List<DocumentDetail> documentDetails2 = new ArrayList<>();
-            documentDetails2.add(new DocumentDetail(null, null, product3, user1, BigDecimal.valueOf(10), BigDecimal.valueOf(55.46), BigDecimal.valueOf(554.6), "2.1"));
-            documentDetails2.add(new DocumentDetail(null, null, product2, user1, BigDecimal.valueOf(5), BigDecimal.valueOf(800), BigDecimal.valueOf(4000), ""));
-            documentDetails2.add(new DocumentDetail(null, null, product2, null, BigDecimal.valueOf(1), BigDecimal.valueOf(67.7), BigDecimal.valueOf(67.7), ""));
+            documentDetails2.add(new DocumentDetail(null, null, true, product3, user1, BigDecimal.valueOf(10), BigDecimal.valueOf(55.46), BigDecimal.valueOf(554.6), "2.1"));
+            documentDetails2.add(new DocumentDetail(null, null, false, product2, user1, BigDecimal.valueOf(5), BigDecimal.valueOf(800), BigDecimal.valueOf(4000), ""));
+            documentDetails2.add(new DocumentDetail(null, null, false, product2, null, BigDecimal.valueOf(1), BigDecimal.valueOf(67.7), BigDecimal.valueOf(67.7), ""));
             documents.addDocument(DateUtils.numbersToDate(2024, 5, 1), transGroup, true, account, "2", documentDetails2);
             documents.addDocument(DateUtils.numbersToDate(2024, 5, 2), transGroup, true, account, "3", null);
             documents.addDocument(DateUtils.numbersToDate(2024, 6, 15), transGroup, true, account, "4", null);
             List<DocumentDetail> documentDetails5 = new ArrayList<>();
-            documentDetails5.add(new DocumentDetail(null, null, product3, user1, BigDecimal.valueOf(2), BigDecimal.valueOf(1.5), BigDecimal.valueOf(3), "Test 5.1"));
-            documentDetails5.add(new DocumentDetail(null, null, product2, null, BigDecimal.valueOf(1), BigDecimal.valueOf(400), BigDecimal.valueOf(400), "Test 5.2"));
+            documentDetails5.add(new DocumentDetail(null, null, true, product3, user1, BigDecimal.valueOf(2), BigDecimal.valueOf(1.5), BigDecimal.valueOf(3), "Test 5.1"));
+            documentDetails5.add(new DocumentDetail(null, null, false, product2, null, BigDecimal.valueOf(1), BigDecimal.valueOf(400), BigDecimal.valueOf(400), "Test 5.2"));
             documents.addDocument(DateUtils.numbersToDate(2024, 6, 15), transGroup, true, account, "5", documentDetails5);
 
             //Update
@@ -325,8 +327,8 @@ class DataManagerTest {
                 detail.setNotes(detail.getNotes() + " *U");
                 detail.modified();
             }
-            documentDetailsForUpdate.add(new DocumentDetail(null, null, product5, null, BigDecimal.valueOf(1), BigDecimal.valueOf(65), BigDecimal.valueOf(65), "Test 1 add 5.+"));
-            documentDetailsForUpdate.add(new DocumentDetail(null, null, product4, null, BigDecimal.valueOf(2), BigDecimal.valueOf(5), BigDecimal.valueOf(10), "Test 2 add 5.+"));
+            documentDetailsForUpdate.add(new DocumentDetail(null, null, false, product5, null, BigDecimal.valueOf(1), BigDecimal.valueOf(65), BigDecimal.valueOf(65), "Test 1 add 5.+"));
+            documentDetailsForUpdate.add(new DocumentDetail(null, null, false, product4, null, BigDecimal.valueOf(2), BigDecimal.valueOf(5), BigDecimal.valueOf(10), "Test 2 add 5.+"));
             boolean recordUpdated = documents.updateDocument(5, DateUtils.numbersToDate(2024, 6, 15), transGroup, false, account, "5*", documentDetailsForUpdate);
             System.out.println("Record updated = " + recordUpdated);
 

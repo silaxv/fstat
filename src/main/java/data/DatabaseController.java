@@ -228,7 +228,7 @@ public class DatabaseController {
         checkConnection();
         if (params == null || params.length == 0)
             throw new Exception("No header's columns");
-        if (valuesList == null || valuesList.size() == 0)
+        if (valuesList == null || valuesList.isEmpty())
             throw new Exception("No values");
 
         //Prepare header
@@ -284,7 +284,7 @@ public class DatabaseController {
                 sqlParams.append(prm);
                 sqlParams.append("=?");
             }
-            String sql = "UPDATE " + tableName + " SET " + sqlParams + (condition != null && condition.length() > 0 ? " WHERE " + condition : "");
+            String sql = "UPDATE " + tableName + " SET " + sqlParams + (condition != null && !condition.isEmpty() ? " WHERE " + condition : "");
             PreparedStatement pstmt = db.prepareStatement(sql);
             valuesToParams(values, pstmt);
             rowsAffected = pstmt.executeUpdate();
@@ -300,7 +300,7 @@ public class DatabaseController {
         int rowsAffected;
 
         try {
-            String sql = "DELETE FROM " + tableName + (condition != null && condition.length() > 0 ? " WHERE " + condition : "");
+            String sql = "DELETE FROM " + tableName + (condition != null && !condition.isEmpty() ? " WHERE " + condition : "");
             PreparedStatement pstmt = db.prepareStatement(sql);
             rowsAffected = pstmt.executeUpdate();
         } catch(SQLException e){
@@ -326,7 +326,7 @@ public class DatabaseController {
     private void initDB() throws Exception {
         try {
             if (!tableExists(TABLE_PREFS)) {
-                createTable(TABLE_PREFS, new String[] { "paramName VARCHAR(64)", "strValue VARCHAR(250)", "intValue INT" });
+                createTable(TABLE_PREFS, new String[] { "param_name VARCHAR(64)", "str_value VARCHAR(250)", "int_value INT" });
                 newDatabase = true;
             }
         } catch(Exception e){

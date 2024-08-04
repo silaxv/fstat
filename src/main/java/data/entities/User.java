@@ -8,6 +8,10 @@ package data.entities;
 
 public class User {
 
+    public static final String TABLE_NAME = "users";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+
     private int id;
     private String name;
 

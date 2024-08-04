@@ -1,6 +1,16 @@
 package data.entities;
 
+/*
+    TABLE accounts
+        id INT
+        name VARCHAR(128)
+*/
+
 public class Account {
+
+    public static final String TABLE_NAME = "accounts";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
 
     private int id;
     private String name;

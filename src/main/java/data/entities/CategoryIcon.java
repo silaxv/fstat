@@ -8,6 +8,10 @@ package data.entities;
 
 public class CategoryIcon {
 
+    public static final String TABLE_NAME = "categories_icons";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_DATA = "data_array";
+
     private String name;
     private byte[] dataArray;
 

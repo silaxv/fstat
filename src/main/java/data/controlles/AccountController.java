@@ -2,15 +2,12 @@ package data.controlles;
 
 import data.DataManager;
 import data.entities.Account;
-import data.entities.Category;
 
 import java.util.List;
 
-public class AccountController extends EntityController<Account> {
+import static data.entities.Account.*;
 
-    private static final String TABLE_NAME = "accounts";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_NAME = "name";
+public class AccountController extends EntityController<Account> {
 
     public AccountController(DataManager dataManager) {
         super(dataManager, TABLE_NAME);
@@ -43,7 +40,7 @@ public class AccountController extends EntityController<Account> {
     }
 
     public int addAccount(String name) throws Exception {
-        return (int) addItem(new String[] { COLUMN_NAME } , new String[] { name });
+        return addItem(new String[] { COLUMN_NAME } , new String[] { name });
     }
 
     public boolean updateAccount(int id, String name) throws Exception {
@@ -58,8 +55,8 @@ public class AccountController extends EntityController<Account> {
         List<Object[]> buffer;
 
         var sql = "SELECT " + COLUMN_ID + ", " + COLUMN_NAME + " FROM " + TABLE_NAME
-                + (condition != null && condition.length() > 0 ? " WHERE " + condition : "")
-                + (orderBy != null && orderBy.length() > 0 ? " ORDER BY " + orderBy : "");
+                + (condition != null && !condition.isEmpty() ? " WHERE " + condition : "")
+                + (orderBy != null && !orderBy.isEmpty() ? " ORDER BY " + orderBy : "");
         buffer = dbController.execQuery(sql);
 
         return buffer;

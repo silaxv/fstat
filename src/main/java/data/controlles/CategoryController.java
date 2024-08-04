@@ -6,14 +6,9 @@ import data.entities.TransGroup;
 
 import java.util.List;
 
-public class CategoryController extends EntityController<Category> {
+import static data.entities.Category.*;
 
-    private static final String TABLE_NAME = "categories";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_PARENT = "f_categories";
-    private static final String COLUMN_TRANS_GROUP = "trans_group";
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_ICON = "f_categories_icons";
+public class CategoryController extends EntityController<Category> {
 
     public CategoryController(DataManager dataManager) {
         super(dataManager, TABLE_NAME);
@@ -82,7 +77,7 @@ public class CategoryController extends EntityController<Category> {
         checkTransGroup(transGroup);
         checkParentCategory(parentId);
 
-        return (int) addItem(
+        return addItem(
                 new String[] { COLUMN_PARENT, COLUMN_TRANS_GROUP, COLUMN_NAME, COLUMN_ICON },
                 new Object[] { parentId != -1 ? parentId : null, transGroup.getId(), name, icon });
     }

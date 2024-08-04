@@ -3,13 +3,20 @@ package data.entities;
 /*
     TABLE categories
         id INT
-        f_categories INT
+        parent_id INT
         trans_group TINYINT
         name VARCHAR(128)
-        f_categories_icons VARCHAR(64)
+        category_icon_name VARCHAR(64)
  */
 
 public class Category {
+
+    public static final String TABLE_NAME = "categories";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_PARENT = "parent_id";
+    public static final String COLUMN_TRANS_GROUP = "trans_group";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_ICON = "category_icon_name";
 
     private int id;
     private int parentId;

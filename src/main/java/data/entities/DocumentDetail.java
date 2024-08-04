@@ -3,9 +3,10 @@ package data.entities;
 /*
     TABLE documents_details
         id INT
-        f_documents INT
-        f_products INT
-        f_users INT
+        document_id INT
+        main BOOLEAN
+        product_id INT
+        user_id INT
         quantity DECIMAL(15,3)
         price MONEY
         subtotal MONEY
@@ -16,8 +17,20 @@ import java.math.BigDecimal;
 
 public class DocumentDetail {
 
+    public static final String TABLE_DT_NAME = "documents_details";
+    public static final String COLUMN_DT_ID = "id";
+    public static final String COLUMN_DT_DOCUMENT = "document_id";
+    public static final String COLUMN_DT_MAIN = "main";
+    public static final String COLUMN_DT_PRODUCT = "product_id";
+    public static final String COLUMN_DT_USER = "user_id";
+    public static final String COLUMN_DT_QUANTITY = "quantity";
+    public static final String COLUMN_DT_PRICE = "price";
+    public static final String COLUMN_DT_SUBTOTAL = "subtotal";
+    public static final String COLUMN_DT_NOTES = "notes";
+
     private Integer id;
     private Document document;
+    private boolean main;
     private Product product;
     private User user;
     private BigDecimal quantity;
@@ -26,9 +39,10 @@ public class DocumentDetail {
     private String notes;
     private boolean modified;
 
-    public DocumentDetail(Integer id, Document document, Product product, User user, BigDecimal quantity, BigDecimal price, BigDecimal subtotal, String notes) {
+    public DocumentDetail(Integer id, Document document, boolean main, Product product, User user, BigDecimal quantity, BigDecimal price, BigDecimal subtotal, String notes) {
         this.id = id;
         this.document = document;
+        this.main = main;
         this.product = product;
         this.user = user;
         this.quantity = quantity;
@@ -51,6 +65,14 @@ public class DocumentDetail {
 
     public void setDocument(Document document) {
         this.document = document;
+    }
+
+    public boolean isMain() {
+        return main;
+    }
+
+    public void setMain(boolean main) {
+        this.main = main;
     }
 
     public Product getProduct() {
