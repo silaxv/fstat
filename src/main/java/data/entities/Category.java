@@ -72,4 +72,13 @@ public class Category {
     public void setCategoryIcon(String categoryIcon) {
         this.categoryIcon = categoryIcon;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", transGroup=" + transGroup +
+                '}';
+    }
 }

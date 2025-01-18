@@ -212,6 +212,7 @@ public class DatabaseController {
             PreparedStatement pstmt = db.prepareStatement(sql);
             valuesToParams(values, pstmt);
             pstmt.executeUpdate();
+            //Get last key
             ResultSet generatedKeys = pstmt.getGeneratedKeys();
             generatedKeys.next();
             if (generatedKeys.getRow() > 0) {
@@ -224,8 +225,10 @@ public class DatabaseController {
         return lastId;
     }
 
-    public void insertDataBatch(String tableName, final String[] params, final List<Object[]> valuesList) throws Exception {
+    public int[] insertDataBatch(String tableName, final String[] params, final List<Object[]> valuesList) throws Exception {
+        int lastId = -1;
         checkConnection();
+
         if (params == null || params.length == 0)
             throw new Exception("No header's columns");
         if (valuesList == null || valuesList.isEmpty())
@@ -265,10 +268,29 @@ public class DatabaseController {
                 PreparedStatement pstmt = db.prepareStatement(sql);
                 valuesToParams(values.toArray(), pstmt);
                 pstmt.executeUpdate();
+                //Get keys list
+                ResultSet generatedKeys = pstmt.getGeneratedKeys();
+                generatedKeys.next();
+                if (generatedKeys.getRow() > 0) {
+                    lastId = generatedKeys.getInt(1);
+                }
             } catch (Exception e) {
                 throw new Exception("Unable to insert rows #" + (rowIndex - recordsToInsert) + "-" + (rowIndex - 1) + ": " + e.getMessage());
             }
         }
+
+        //Calculate keys list
+        int[] keysList;
+        if (lastId >= 0) {
+            keysList = new int[valuesList.size()];
+            for (int i = 0; i < valuesList.size(); i++) {
+                keysList[i] = lastId - valuesList.size() + i + 1;
+            }
+        } else {
+            keysList = null;
+        }
+
+        return keysList;
     }
 
     public int updateData(String tableName, String condition, String[] params, Object[] values) throws Exception {
@@ -288,7 +310,7 @@ public class DatabaseController {
             PreparedStatement pstmt = db.prepareStatement(sql);
             valuesToParams(values, pstmt);
             rowsAffected = pstmt.executeUpdate();
-        } catch(SQLException e){
+        } catch(SQLException e) {
             throw new Exception("Can't update data in a table <" + tableName + ">\n" + e.getMessage());
         }
 
@@ -303,7 +325,7 @@ public class DatabaseController {
             String sql = "DELETE FROM " + tableName + (condition != null && !condition.isEmpty() ? " WHERE " + condition : "");
             PreparedStatement pstmt = db.prepareStatement(sql);
             rowsAffected = pstmt.executeUpdate();
-        } catch(SQLException e){
+        } catch(SQLException e) {
             throw new Exception("Can't update data in a table <" + tableName + ">\n" + e.getMessage());
         }
 
@@ -318,7 +340,7 @@ public class DatabaseController {
             ResultSet rs = md.getTables(null, null, tableName, null);
             rs.next();
             return rs.getRow() > 0;
-        } catch(SQLException e){
+        } catch(SQLException e) {
             throw new Exception("Can't check a table <" + tableName + ">\n" + e.getMessage());
         }
     }
@@ -329,7 +351,7 @@ public class DatabaseController {
                 createTable(TABLE_PREFS, new String[] { "param_name VARCHAR(64)", "str_value VARCHAR(250)", "int_value INT" });
                 newDatabase = true;
             }
-        } catch(Exception e){
+        } catch(Exception e) {
             throw new Exception("Can't initialize the database\n" + e.getMessage());
         }
     }

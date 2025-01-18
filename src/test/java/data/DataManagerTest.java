@@ -306,18 +306,18 @@ class DataManagerTest {
 
             //Add document
             DateUtils.numbersToDate(2024, 5, 1);
-            documents.addDocument(DateUtils.numbersToDate(2024, 5, 1), transGroup, true, account, "1", null);
+            documents.addDocument(DateUtils.numbersToDate(2024, 5, 1), transGroup, true, false, account, "1", null, null);
             List<DocumentDetail> documentDetails2 = new ArrayList<>();
-            documentDetails2.add(new DocumentDetail(null, null, true, product3, user1, BigDecimal.valueOf(10), BigDecimal.valueOf(55.46), BigDecimal.valueOf(554.6), "2.1"));
-            documentDetails2.add(new DocumentDetail(null, null, false, product2, user1, BigDecimal.valueOf(5), BigDecimal.valueOf(800), BigDecimal.valueOf(4000), ""));
-            documentDetails2.add(new DocumentDetail(null, null, false, product2, null, BigDecimal.valueOf(1), BigDecimal.valueOf(67.7), BigDecimal.valueOf(67.7), ""));
-            documents.addDocument(DateUtils.numbersToDate(2024, 5, 1), transGroup, true, account, "2", documentDetails2);
-            documents.addDocument(DateUtils.numbersToDate(2024, 5, 2), transGroup, true, account, "3", null);
-            documents.addDocument(DateUtils.numbersToDate(2024, 6, 15), transGroup, true, account, "4", null);
+            documentDetails2.add(new DocumentDetail(null, null, true, product3.getCategory(), product3, user1, BigDecimal.valueOf(10), BigDecimal.valueOf(55.46), BigDecimal.valueOf(554.6), "2.1"));
+            documentDetails2.add(new DocumentDetail(null, null, false, product2.getCategory(), product2, user1, BigDecimal.valueOf(5), BigDecimal.valueOf(800), BigDecimal.valueOf(4000), ""));
+            documentDetails2.add(new DocumentDetail(null, null, false, product2.getCategory(), product2, null, BigDecimal.valueOf(1), BigDecimal.valueOf(67.7), BigDecimal.valueOf(67.7), ""));
+            documents.addDocument(DateUtils.numbersToDate(2024, 5, 1), transGroup, true, false, account, "2", documentDetails2, null);
+            documents.addDocument(DateUtils.numbersToDate(2024, 5, 2), transGroup, true, false, account, "3", null, null);
+            documents.addDocument(DateUtils.numbersToDate(2024, 6, 15), transGroup, true, false, account, "4", null, null);
             List<DocumentDetail> documentDetails5 = new ArrayList<>();
-            documentDetails5.add(new DocumentDetail(null, null, true, product3, user1, BigDecimal.valueOf(2), BigDecimal.valueOf(1.5), BigDecimal.valueOf(3), "Test 5.1"));
-            documentDetails5.add(new DocumentDetail(null, null, false, product2, null, BigDecimal.valueOf(1), BigDecimal.valueOf(400), BigDecimal.valueOf(400), "Test 5.2"));
-            documents.addDocument(DateUtils.numbersToDate(2024, 6, 15), transGroup, true, account, "5", documentDetails5);
+            documentDetails5.add(new DocumentDetail(null, null, true, product3.getCategory(), product3, user1, BigDecimal.valueOf(2), BigDecimal.valueOf(1.5), BigDecimal.valueOf(3), "Test 5.1"));
+            documentDetails5.add(new DocumentDetail(null, null, false, product2.getCategory(), product2, null, BigDecimal.valueOf(1), BigDecimal.valueOf(400), BigDecimal.valueOf(400), "Test 5.2"));
+            documents.addDocument(DateUtils.numbersToDate(2024, 6, 15), transGroup, true, false, account, "5", documentDetails5, null);
 
             //Update
             Document document5 = documents.loadDocumentById(5);
@@ -327,9 +327,9 @@ class DataManagerTest {
                 detail.setNotes(detail.getNotes() + " *U");
                 detail.modified();
             }
-            documentDetailsForUpdate.add(new DocumentDetail(null, null, false, product5, null, BigDecimal.valueOf(1), BigDecimal.valueOf(65), BigDecimal.valueOf(65), "Test 1 add 5.+"));
-            documentDetailsForUpdate.add(new DocumentDetail(null, null, false, product4, null, BigDecimal.valueOf(2), BigDecimal.valueOf(5), BigDecimal.valueOf(10), "Test 2 add 5.+"));
-            boolean recordUpdated = documents.updateDocument(5, DateUtils.numbersToDate(2024, 6, 15), transGroup, false, account, "5*", documentDetailsForUpdate);
+            documentDetailsForUpdate.add(new DocumentDetail(null, null, false, product5.getCategory(), product5, null, BigDecimal.valueOf(1), BigDecimal.valueOf(65), BigDecimal.valueOf(65), "Test 1 add 5.+"));
+            documentDetailsForUpdate.add(new DocumentDetail(null, null, false, product4.getCategory(), product4, null, BigDecimal.valueOf(2), BigDecimal.valueOf(5), BigDecimal.valueOf(10), "Test 2 add 5.+"));
+            boolean recordUpdated = documents.updateDocument(5, DateUtils.numbersToDate(2024, 6, 15), transGroup, false, false, account, "5*", documentDetailsForUpdate, null);
             System.out.println("Record updated = " + recordUpdated);
 
             //Delete

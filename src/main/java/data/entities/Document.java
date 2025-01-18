@@ -6,11 +6,13 @@ package data.entities;
         doc_date DATE
         trans_group TINYINT
         act BOOLEAN
+        exclude BOOLEAN
         account_id INT
         notes VARCHAR(1024)
 */
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class Document {
     public static final String COLUMN_DATE = "doc_date";
     public static final String COLUMN_TRANS_GROUP = "trans_group";
     public static final String COLUMN_ACT = "act";
+    public static final String COLUMN_EXCLUDE = "exclude";
     public static final String COLUMN_ACCOUNT = "account_id";
     public static final String COLUMN_NOTES = "notes";
 
@@ -28,11 +31,17 @@ public class Document {
     private Date docDate;
     private TransGroup transGroup;
     private boolean act;
+    private boolean exclude;
     private Account account;
     private String notes;
     private List<DocumentDetail> details;
     private Integer count;
     private BigDecimal total;
+
+    public Document() {
+        this.details = new ArrayList<>();
+        this.exclude = false;
+    }
 
     public int getId() {
         return id;
@@ -66,6 +75,14 @@ public class Document {
         this.act = act;
     }
 
+    public boolean isExclude() {
+        return exclude;
+    }
+
+    public void setExclude(boolean exclude) {
+        this.exclude = exclude;
+    }
+
     public Account getAccount() {
         return account;
     }
@@ -84,6 +101,15 @@ public class Document {
 
     public List<DocumentDetail> getDetails() {
         return details;
+    }
+
+    public DocumentDetail getMainDetail() {
+        for (var detail : details) {
+            if (detail.isMain())
+                return detail;
+        }
+
+        return null;
     }
 
     public void setDetails(List<DocumentDetail> details) {

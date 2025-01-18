@@ -66,6 +66,23 @@ public class DateUtils {
         return cal.get(Calendar.YEAR);
     }
 
+    public static Date dateMonthFirstDay(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+
+        return cal.getTime();
+    }
+
+    public static Date dateMonthLastDay(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int day = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+
+        return cal.getTime();
+    }
+
     public static int dateDifferenceDays(Date date1, Date date2) throws Exception {
         if (date1 == null || date2 == null) {
             throw new Exception("NULL date");
@@ -74,6 +91,10 @@ public class DateUtils {
         long difference = date1.getTime() - date2.getTime();
 
         return (int)(difference / (24 * 60 * 60 * 1000));
+    }
+
+    public static Date getCurrentDate() {
+        return new Date();
     }
 
 }

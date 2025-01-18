@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.ArrayList;
+
 public class StringUtils {
 
     public static String arrayToString(String[] strArray) {

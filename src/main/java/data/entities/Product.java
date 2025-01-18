@@ -20,6 +20,7 @@ public class Product {
     private Category category;
     private TransGroup transGroup;
     private String name;
+    private boolean temporary;
 
     public int getId() {
         return id;
@@ -51,6 +52,18 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isTemporary() {
+        return temporary;
+    }
+
+    public void setTemporary(boolean temporary) {
+        this.temporary = temporary;
+    }
+
+    public String toString() {
+        return name;
     }
 
 }

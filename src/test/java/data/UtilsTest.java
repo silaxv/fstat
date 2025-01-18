@@ -23,6 +23,15 @@ public class UtilsTest {
         Date dateRes1 = DateUtils.intToDate(period1);
         System.out.println("Date0 result: " + DateUtils.dateToStringISO(dateRes0));
         System.out.println("Date1 result: " + DateUtils.dateToStringISO(dateRes1));
+
+        Date date2 = DateUtils.numbersToDate(2024, 2, 15);
+        Date dateBegin = DateUtils.dateMonthFirstDay(date2);
+        Date dateEnd = DateUtils.dateMonthLastDay(date2);
+        Date datePrevBegin = DateUtils.dateMonthFirstDay(DateUtils.dateAddDays(DateUtils.dateMonthFirstDay(date2), -1));
+        Date datePrevEnd = DateUtils.dateMonthLastDay(datePrevBegin);
+        System.out.println("First day of the month: " + DateUtils.dateToStringISO(dateBegin));
+        System.out.println("Last day of the month: " + DateUtils.dateToStringISO(dateEnd));
+        System.out.println("Previous period: " + DateUtils.dateToStringISO(datePrevBegin) + " - " + DateUtils.dateToStringISO(datePrevEnd));
     }
 
 }

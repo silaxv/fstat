@@ -37,6 +37,7 @@ public class DataManager {
         documents.setCategories(categories);
         documents.setProducts(products);
         documents.setUsers(users);
+        documents.setTags(tags);
     }
 
     public static DataManager getInstance() {

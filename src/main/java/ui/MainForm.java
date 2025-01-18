@@ -4,6 +4,7 @@ import data.Constants;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class MainForm extends JFrame {
 
@@ -66,7 +67,8 @@ public class MainForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //What happens when the frame closes?
         setTitle(Constants.DEFAULT_TITLE);
 
-        mainPanel = new WorkPanel();
+        mainPanel = new WorkPanel(this);
+        menuBar.setWorkPanel(mainPanel);
 
         JSplitPane topAndDown = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         topAndDown.setOneTouchExpandable(true);
@@ -78,9 +80,13 @@ public class MainForm extends JFrame {
         all.add(topAndDown, BorderLayout.CENTER);
 
         getContentPane().add(all);
-        setMinimumSize(new Dimension(800, 620));
+        setMinimumSize(new Dimension(1400, 820));
         pack();
         setLocationRelativeTo(null);
+
+        //Keys
+        getRootPane().registerKeyboardAction(e -> mainPanel.insertTransactionAction(), KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        getRootPane().registerKeyboardAction(e -> mainPanel.deleteTransactionAction(), KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     private void initProperties() {

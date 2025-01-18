@@ -5,6 +5,7 @@ import data.entities.Category;
 import data.entities.Product;
 import data.entities.TransGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static data.entities.Product.*;
@@ -37,6 +38,30 @@ public class ProductController extends EntityController<Product> {
         return null;
     }
 
+    public Product getProductByCategoryName(Category category, String name) {
+        for (var i = 0; i < size(); i++) {
+            Product product = get(i);
+            if (product.getCategory() == category && product.getName().equals(name)) {
+                return product;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Product> getProductsListByCategory(Category category) {
+        List<Product> products = new ArrayList<>();
+
+        for (var i = 0; i < size(); i++) {
+            Product product = get(i);
+            if (product.getCategory() == category) {
+                products.add(product);
+            }
+        }
+
+        return products;
+    }
+
     public void setCategories(CategoryController categories) {
         this.categories = categories;
     }
@@ -46,6 +71,8 @@ public class ProductController extends EntityController<Product> {
         checkCategory(category);
 
         loadList(COLUMN_TRANS_GROUP + "=" + transGroup.getId() + (category != null ? " AND " + COLUMN_CATEGORY + "=" + category.getId() : ""), COLUMN_NAME);
+
+        //todo: add unicode sorting
     }
 
     public void loadProductsList() throws Exception {
@@ -60,7 +87,7 @@ public class ProductController extends EntityController<Product> {
         checkTransGroup(transGroup);
         checkCategory(category);
 
-        return (int) addItem(
+        return addItem(
                 new String[] { COLUMN_CATEGORY, COLUMN_TRANS_GROUP, COLUMN_NAME },
                 new Object[] { category != null ? category.getId() : null, transGroup.getId(), name });
     }

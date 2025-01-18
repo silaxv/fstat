@@ -4,6 +4,7 @@ import data.DataManager;
 import data.entities.Category;
 import data.entities.TransGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static data.entities.Category.*;
@@ -46,13 +47,27 @@ public class CategoryController extends EntityController<Category> {
         return null;
     }
 
+    public List<Category> getCategoriesByParent(Category parent) {
+        List<Category> itemsList = new ArrayList<>();
+
+        for (var i = 0; i < size(); i++) {
+            Category category = get(i);
+            if (category.getParent() == parent)
+                itemsList.add(category);
+        }
+
+        return itemsList;
+    }
+
     public void loadCategoriesListByTransGroup(TransGroup transGroup) throws Exception {
         checkTransGroup(transGroup);
         loadList(COLUMN_TRANS_GROUP + "=" + transGroup.getId(), COLUMN_NAME);
+        buildCategoriesTree();
     }
 
     public void loadCategoriesList() throws Exception {
         loadList(null, COLUMN_TRANS_GROUP + ", " + COLUMN_NAME);
+        buildCategoriesTree();
     }
 
     public Category loadCategoryById(int id) throws Exception {
@@ -131,6 +146,19 @@ public class CategoryController extends EntityController<Category> {
         return item;
     }
 
+    private void buildCategoriesTree() {
+        for (var item : items) {
+            if (item.getId() != -1) {
+                for (var searchItem : items) {
+                    if (item.getParentId() == searchItem.getId()) {
+                        item.setParent(searchItem);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     private void checkParentCategory(int parentId) throws Exception {
         if (!categoryExistsById(parentId))
             throw new Exception("A parent category with id = " + parentId + " doesn't exist!");
@@ -140,5 +168,4 @@ public class CategoryController extends EntityController<Category> {
         if (transGroup == null)
             throw new Exception("Trans group can't be empty!");
     }
-
 }
